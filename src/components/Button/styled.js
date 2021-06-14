@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import {DARK_GRAY, RADIUS, SHADOW, TRANSITION_FAST, WHITE} from "../../constants/variablas";
+import { DARK_GRAY, RADIUS, SHADOW, SHADOW_SMALL, TRANSITION_FAST, WHITE } from "../../constants/variablas";
 
 export const Button = styled.button`
   height: 45px;
@@ -9,7 +9,10 @@ export const Button = styled.button`
   background-color: ${WHITE};
   cursor: pointer;
   transition: ${TRANSITION_FAST};
-  &:hover{
+  &:hover,:focus{
     box-shadow: ${SHADOW};
+  }
+  &:active{
+    box-shadow: ${SHADOW_SMALL};
   }
 `;

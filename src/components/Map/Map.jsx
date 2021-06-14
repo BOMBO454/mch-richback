@@ -1,25 +1,25 @@
-import {Map as YMap, YMaps, Placemark} from "react-yandex-maps";
-import {formattedMoney} from "../../helpers/money";
-import { useEffect, useRef } from "react";
+import { Map as YMap, YMaps, Placemark, Circle } from "react-yandex-maps";
+import { formattedMoney } from "../../helpers/money";
+import { useEffect, useRef, useState } from "react";
 import { getHeatMap, getPlaces } from "../../api/places";
+import _ from "lodash"
 
 function Map({places}) {
   const mapRef = useRef();
+  const [heat, setHeat] = useState([]);
+  const [maxHeatCount, setMaxHeatCount] = useState(0);
+  const [maxHeatDuration, setMaxHeatDuration] = useState(0);
   useEffect(() => {
-      getHeatMap({lat:55.731061,lng:37.579445,radius:0.005}).then(data => {
-        console.log("data", data)
-        console.log("window.ymaps", window.ymaps)
-        window.ymaps.modules.require(['Heatmap'], function (Heatmap) {
-          console.log("Heatmap", Heatmap)
-          let mapData = data.heatmap.map(h=>([h.lng,h.lat])),
-            heatmap = new Heatmap(mapData);
-          heatmap.setMap(mapRef.current);
-        });
-
-      }).catch(err => {
-        alert(err)
-        console.log("err", err)
-      })
+    getHeatMap({lat: 55.731061, lng: 37.579445, radius: 0.01}).then(data => {
+      setHeat(data.heatmap)
+      console.log("data.heatmap", data.heatmap);
+      setMaxHeatCount(_.maxBy(data.heatmap,(o)=>(o.counts)))
+      console.log("maxHeatCount", maxHeatCount);
+      setMaxHeatDuration(_.maxBy(data.heatmap,(o)=>(o.duration)))
+    }).catch(err => {
+      alert(err)
+      console.log("err", err)
+    })
   }, [])
   return (
     <YMaps modules={["Heatmap"]} query={{apikey: "3a938c7f-953d-484c-9fee-5d2b9c12bb53"}}>
@@ -32,16 +32,28 @@ function Map({places}) {
             geometry={[p.lat, p.lng]}
             properties={{
               iconContent: p.usertime,
-              iconCaption: formattedMoney(p.cost),
+              iconCaption: formattedMoney(p.cost/4),
               hintContent: "3",
-              balloonContentHeader: `Снять в аренду ${p.area}м^2 за ${formattedMoney(p.cost)}`,
+              balloonContentHeader: `Снять в аренду ${p.area}м^2 за ${formattedMoney(p.cost/4)}`,
               balloonContentBody: `Этаж ${p.floor}`,
-              // balloonContentFooter: "footer"
+              balloonContentFooter: "Плюсы"
             }}
             modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
             options={{
               preset: "islands#circleIcon",
               iconImageSize: [30, 30],
+            }}
+          />
+        ))}
+        {heat && heat.map(h=>(
+          <Circle
+            geometry={[[h.lat, h.lng], 100]}
+            options={{
+              fillColor: '#DB7093',
+              opacity: (h.counts / maxHeatCount.counts)*0.75,
+              strokeColor: '#990066',
+              strokeOpacity: 1,
+              strokeWidth: 0,
             }}
           />
         ))}
