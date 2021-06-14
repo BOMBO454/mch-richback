@@ -4,6 +4,12 @@ import { getPlaces } from "../api/places";
 class MapStore {
   @observable address = "Метро Парк Культуры";
   @observable type = "cafe";
+  @observable filter = {
+    from_price:0,
+    to_price:90000000,
+    from_area:0,
+    to_area:9000
+  };
   @observable map = {
     viewport:{
       longitude:37.579445,
@@ -34,6 +40,11 @@ class MapStore {
   @action
   setType(type) {
     this.type = type;
+  }
+
+  @action
+  setFilter(filter) {
+    this.filter = filter;
   }
 }
 

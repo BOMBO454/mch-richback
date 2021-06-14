@@ -1,6 +1,6 @@
-import {instance} from "./index"
+import { instance } from "./index"
 
-export const getPlaces = ({address,type}) => {
+export const getPlaces = ({address, type, filter}) => {
   return new Promise((res, rej) => {
     instance({
       url: "places",
@@ -9,6 +9,10 @@ export const getPlaces = ({address,type}) => {
         type: type,
         address: address,
         topk: 10,
+        from_price: filter.from_price,
+        to_price: filter.to_price,
+        from_area: filter.from_area,
+        to_area: filter.to_area,
       },
     }).then(data => (
       res(data.data)
@@ -16,13 +20,13 @@ export const getPlaces = ({address,type}) => {
   })
 }
 
-export const getHeatMap = ({lat,lng,radius}) => {
+export const getHeatMap = ({lat, lng, radius}) => {
   return new Promise((res, rej) => {
     instance({
       url: "heatmap",
       method: "POST",
       data: {
-        lat,lng,radius
+        lat, lng, radius
       }
     }).then(data => (
       res(data.data)

@@ -17,7 +17,7 @@ function NewMap() {
   const [showPopup, setShowPopup] = useState(undefined);
 
   useEffect(() => {
-    getPlaces({address: mapStore.address, type: mapStore.type}).then(data => {
+    getPlaces({address: mapStore.address, type: mapStore.type, filter:mapStore.filter}).then(data => {
       setPlaces(data.places)
     }).catch(err => {
       console.error(err)

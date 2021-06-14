@@ -1,19 +1,36 @@
 import * as S from "./styled";
 import Button from "../Button/Button";
 import Select from "react-select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStore } from "../../store";
 import { formattedMoney } from "../../helpers/money";
 import { observer } from "mobx-react";
 import { AnimatePresence } from "framer-motion";
 import InputField from "../InputField/InputField";
+import { B } from "react-select/dist/index-4bd03571.esm";
 
 function Sidebar() {
   const {mapStore} = useStore()
   const [type, setType] = useState("type");
+  const [from_price, setFrom_price] = useState(undefined);
+  const [to_price, setTo_price] = useState(undefined);
+  const [from_area, setFrom_area] = useState(undefined);
+  const [to_area, setTo_area] = useState(undefined);
+
+  useEffect(() => {
+    setFrom_price(mapStore.filter.from_price)
+    setTo_price(mapStore.filter.to_price)
+    setFrom_area(mapStore.filter.from_area)
+    setTo_area(mapStore.filter.to_area)
+  }, [mapStore]);
+
+
   const [planVisibility, setPlanVisibility] = useState(false);
   const handleTypeChange = (newValue, actionMeta) => {
     mapStore.setType(newValue.value);
+  }
+  const handleApply=()=>{
+    mapStore.setFilter({from_price,to_price,from_area,to_area});
   }
   return (
     <S.Sidebar>
@@ -35,11 +52,13 @@ function Sidebar() {
               {value: 'retail', label: 'торговля'},
               {value: 'services', label: 'услуги'}
             ]}/>
-          <InputField disabled value={"Площадь от и до"} />
-          <InputField disabled value={"Цена от и до"} />
-          <InputField disabled value={"Этаж"} />
-          <InputField disabled value={"Коэфициент конкуренции"} />
-          <InputField disabled value={"Человеко-поток"} />
+          <InputField value={from_price} title={"Цена от"} onChange={e => setFrom_price(e.target.value)}/>
+          <InputField value={to_price} title={"Цена до"} onChange={e => setTo_price(e.target.value)}/>
+          <InputField value={from_area} title={"Площадь от"} onChange={e => setFrom_area(e.target.value)}/>
+          <InputField value={to_area} title={"Площадь до"} onChange={e => setTo_area(e.target.value)}/>
+          <InputField disabled title={"Коэфициент конкуренции"} />
+          <InputField disabled title={"Человеко-поток"} />
+          <Button onClick={handleApply}>Применить</Button>
         </S.List>
         <div>
           <h5>Место</h5>

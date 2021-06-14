@@ -9,6 +9,7 @@ export const Input = styled.input`
 `
 export const InputField = styled.label`
   display: flex;
+  flex-direction: column;
 
   input {
     width: 100%;
