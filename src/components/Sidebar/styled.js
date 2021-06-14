@@ -37,22 +37,23 @@ export const Sidebar = styled.aside`
         }
       }
       
-      button {
-        width: 100%;
-        margin-bottom: 20px;
-      }
-      
       h5 {
         margin-top: 0;
+      }
+      
+      ul {
+        margin: 0 0 20px 0;
+        padding: 0;
+        
+        &:last-of-type {
+          margin-bottom: 0;
+        }
       }
       
       li {
         list-style: none;
         padding: 8px 20px;
         margin: 0 -20px;
-        &:hover {
-          background-color: gainsboro;
-        }
       }
     }
     
@@ -102,4 +103,10 @@ export const Plan = styled(motion.div)`
   height: 100%;
   width: 100%;
   padding: 20px;
+`
+
+export const List = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `

@@ -6,6 +6,7 @@ import { useStore } from "../../store";
 import { formattedMoney } from "../../helpers/money";
 import { observer } from "mobx-react";
 import { AnimatePresence } from "framer-motion";
+import InputField from "../InputField/InputField";
 
 function Sidebar() {
   const {mapStore} = useStore()
@@ -17,13 +18,14 @@ function Sidebar() {
   return (
     <S.Sidebar>
       <div className="side__half top">
-        <div>
-          <Button>Карта</Button>
-          <Button>Анализ организации</Button>
-          <Button>Отчёт</Button>
-        </div>
-        <div>
+        <S.List>
+          <Button disabled>Карта</Button>
+          <Button disabled>Анализ организации</Button>
+          <Button disabled>Отчёт</Button>
+        </S.List>
+        <S.List>
           <Select
+            style={{marginBottom: "20px"}}
             onChange={handleTypeChange}
             defaultValue={{value: 'cafe', label: 'Кафе'}}
             options={[
@@ -33,12 +35,12 @@ function Sidebar() {
               {value: 'retail', label: 'торговля'},
               {value: 'services', label: 'услуги'}
             ]}/>
-          <Button>Категории</Button>
-          <Button>Анализ района</Button>
-          <Button>Тепловая карта</Button>
-          <Button>Цены</Button>
-          <Button>Число людей</Button>
-        </div>
+          <InputField disabled value={"Площадь от и до"} />
+          <InputField disabled value={"Цена от и до"} />
+          <InputField disabled value={"Этаж"} />
+          <InputField disabled value={"Коэфициент конкуренции"} />
+          <InputField disabled value={"Человеко-поток"} />
+        </S.List>
         <div>
           <h5>Место</h5>
           <ul>

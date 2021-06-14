@@ -1,9 +1,13 @@
 import styled from "styled-components"
-import {SHADOW} from "../../constants/variablas";
+import { LIGHT_GRAY, SHADOW, SHADOW_SMALL } from "../../constants/variablas";
 
+export const Input = styled.input`
+  box-shadow: inset ${SHADOW_SMALL};
+  &:disabled{
+    background-color: ${LIGHT_GRAY};
+  }
+`
 export const InputField = styled.label`
-  flex: 1 1 auto;
-  padding: 0 20px;
   display: flex;
 
   input {

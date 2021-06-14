@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import {SHADOW} from "../../constants/variablas";
+import { InputField } from "../InputField/styled";
 
 export const Header = styled.header`
   flex: 0 0 80px;
@@ -8,4 +8,7 @@ export const Header = styled.header`
   gap: 20px;
   z-index: 1;
   display: flex;
+  ${InputField}{
+    flex: 1 1 100%;
+  }
 `;
