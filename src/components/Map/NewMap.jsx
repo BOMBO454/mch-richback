@@ -31,9 +31,9 @@ function NewMap() {
 
   const onMarkerClick = (event,key,data) => {
     event.stopPropagation();
-    if(showPopup === key){
+    if (showPopup === key) {
       setShowPopup(undefined)
-    }else{
+    } else {
       setShowPopup(key)
       mapStore.setCurrentPlace(data);
     }
@@ -112,12 +112,12 @@ function NewMap() {
       />
       {places && places.map((v, key) => (
         <Marker
-          onClick={(e)=>{onMarkerClick(e,key+"key",v)}}
+          onClick={(e)=>{onMarkerClick(e,key,v)}}
           key={key}
           longitude={v.lng}
           latitude={v.lat}
         >
-          {showPopup === key+"key" ?
+          {showPopup === key ?
             <Pop onClick={closeMarker}>
               <h4>Сдача {v.area}м^2 за {formattedMoney(v.cost)}р</h4>
               <li>Хороших компаний рядом {v.biz_count}</li>
