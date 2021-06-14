@@ -1,8 +1,15 @@
 import * as S from "./styled";
 import Button from "../Button/Button";
 import Select from "react-select";
+import { useState } from "react";
+import { useStore } from "../../store";
 
 export default function Sidebar() {
+  const {mapStore} = useStore()
+  const [type, setType] = useState("type");
+  const handleTypeChange = (newValue, actionMeta) => {
+    mapStore.setType(newValue.value);
+  }
   return (
     <S.Sidebar>
       <div className="side__half top">
@@ -12,13 +19,16 @@ export default function Sidebar() {
           <Button>Отчёт</Button>
         </div>
         <div>
-          <Select options={[
-            { value: 'cafe', label: 'Кафе' },
-            { value: 'beauty', label: 'клиника' },
-            { value: 'medicine', label: 'клиника' },
-            { value: 'retail', label: 'торговля' },
-            { value: 'services', label: 'услуги' }
-          ]} />
+          <Select
+            onChange={handleTypeChange}
+            defaultValue={{value: 'cafe', label: 'Кафе'}}
+            options={[
+              {value: 'cafe', label: 'Кафе'},
+              {value: 'beauty', label: 'парикмахерская'},
+              {value: 'medicine', label: 'клиника'},
+              {value: 'retail', label: 'торговля'},
+              {value: 'services', label: 'услуги'}
+            ]}/>
           <Button>Категории</Button>
           <Button>Анализ района</Button>
           <Button>Тепловая карта</Button>
@@ -44,14 +54,14 @@ export default function Sidebar() {
       </div>
       <div className="side__half bottom">
         <div>
-        <h4>Информация</h4>
-        <div>Адрес: </div>
-        <div>Площадь: </div>
-        <div>Тип помещения: </div>
-        <div>Стоимость аренды: </div>
-        <p className="description">
+          <h4>Информация</h4>
+          <div>Адрес:</div>
+          <div>Площадь:</div>
+          <div>Тип помещения:</div>
+          <div>Стоимость аренды:</div>
+          <p className="description">
 
-        </p>
+          </p>
         </div>
         <div>
           <img src="https://img3.goodfon.com/wallpaper/nbig/b/bd/koshka-leto-fon-4893.jpg" alt="Cat"/>

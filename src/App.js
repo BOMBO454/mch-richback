@@ -7,7 +7,6 @@ import {
 import Home from "./pages/Home";
 import Container from "./components/Container/Container";
 import {StoreProvider} from "./store";
-import Mapbox from "./pages/Mapbox";
 
 function App() {
   return (

@@ -1,12 +1,12 @@
 import {instance} from "./index"
 
-export const getPlaces = ({address}) => {
+export const getPlaces = ({address,type}) => {
   return new Promise((res, rej) => {
     instance({
       url: "places",
       method: "POST",
       data: {
-        type: "cafe",
+        type: type,
         address: address,
         topk: 10,
       },
