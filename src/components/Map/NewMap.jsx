@@ -5,21 +5,24 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { geo } from "../../constants/geo-routers";
 import { observer } from "mobx-react";
 import { Icon } from "./styled";
+import { getPlaces } from "../../api/places";
 
 function NewMap() {
   const {mapStore} = useStore()
+  const [places, setPlaces] = useState([]);
   const [viewport, setViewport] = useState(
     mapStore.map.viewport
   );
 
-  useEffect(() => {
-    mapStore.getPlacesAction()
-  }, []);
-
+  console.log("mapStore.address", mapStore.address);
 
   useEffect(() => {
-    console.log(mapStore.places);
-  })
+    getPlaces({address: mapStore.address}).then(data => {
+      setPlaces(data.places)
+    }).catch(err => {
+      console.error(err)
+    })
+  }, [mapStore.address]);
 
   return (
     <MapGL
@@ -92,7 +95,7 @@ function NewMap() {
           ]
         }}
       />
-      {mapStore.places && mapStore.places.map((v,key)=>(
+      {places && places.map((v,key)=>(
         <Marker
           key={key}
           longitude={v.lng}

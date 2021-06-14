@@ -1,5 +1,6 @@
 import * as S from "./styled";
 import Button from "../Button/Button";
+import Select from "react-select";
 
 export default function Sidebar() {
   return (
@@ -11,6 +12,13 @@ export default function Sidebar() {
           <Button>Отчёт</Button>
         </div>
         <div>
+          <Select options={[
+            { value: 'cafe', label: 'Кафе' },
+            { value: 'beauty', label: 'клиника' },
+            { value: 'medicine', label: 'клиника' },
+            { value: 'retail', label: 'торговля' },
+            { value: 'services', label: 'услуги' }
+          ]} />
           <Button>Категории</Button>
           <Button>Анализ района</Button>
           <Button>Тепловая карта</Button>

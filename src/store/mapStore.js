@@ -17,17 +17,6 @@ class MapStore {
 
   constructor() {
     makeObservable(this); // https://mobx.js.org/enabling-decorators.html
-    this.getPlacesAction()
-  }
-
-  @action
-  getPlacesAction(){
-    getPlaces({address: this.address}).then(data => {
-      this.places = data.places
-      return data.places
-    }).catch(err => {
-      this.places = []
-    })
   }
 
   @action

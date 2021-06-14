@@ -18,9 +18,6 @@ function App() {
             <Route exact path="/">
               <Home/>
             </Route>
-            <Route exact path="/map-box">
-              <Mapbox/>
-            </Route>
           </Switch>
         </Container>
       </StoreProvider>
