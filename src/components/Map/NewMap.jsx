@@ -19,6 +19,24 @@ function NewMap() {
   useEffect(() => {
     getHeatMap({lat: 55.731061, lng: 37.579445, radius: 0.01}).then(data => {
       setHeat(data.heatmap)
+      console.log("data.heatmap", JSON.stringify(data.heatmap.map((m,id)=>({
+        "type": "Feature",
+          "properties": {
+          "id": id+"",
+            "mag": 2.3,
+            "time": 1507425650893,
+            "felt": null,
+            "tsunami": 0
+        },
+        "geometry": {
+          "type": "Point",
+            "coordinates": [
+              m.lng,
+              m.lat,
+            0.0
+          ]
+        }
+      }))));
       setMaxHeatCount(_.maxBy(data.heatmap,(o)=>(o.counts)))
       setMaxHeatDuration(_.maxBy(data.heatmap,(o)=>(o.duration)))
     }).catch(err => {
@@ -38,7 +56,7 @@ function NewMap() {
     map.current.on('load', function () {
       map.current.addSource('earthquakes', {
         'type': 'geojson',
-        'data': "http://84.252.140.52:3000/geo-routers.geojson"});
+        'data': "public/geoRouters.geojson"});
 
       map.current.addLayer(
         {
