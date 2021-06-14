@@ -12,7 +12,7 @@ function Header() {
   }
   return (
     <S.Header>
-      <Button>Фильтр</Button>
+      <Button disabled>Фильтр</Button>
       <InputField value={place} onChange={e=>{setPlace(e.target.value)}}/>
       <Button onClick={handleApply}>Применить</Button>
     </S.Header>

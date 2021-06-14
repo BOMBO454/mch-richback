@@ -1,7 +1,7 @@
 import * as S from "./styled";
 
-export default function Button({children,onClick}) {
+export default function Button({children,onClick,disabled}) {
   return (
-    <S.Button onClick={onClick}>{children}</S.Button>
+    <S.Button disabled={disabled} onClick={onClick}>{children}</S.Button>
   )
 }

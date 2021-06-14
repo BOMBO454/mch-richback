@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { DARK_GRAY, RADIUS, SHADOW, SHADOW_SMALL, TRANSITION_FAST, WHITE } from "../../constants/variablas";
+import { DARK_GRAY, LIGHT_GRAY, RADIUS, SHADOW, SHADOW_SMALL, TRANSITION_FAST, WHITE } from "../../constants/variablas";
 
 export const Button = styled.button`
   height: 45px;
@@ -14,5 +14,9 @@ export const Button = styled.button`
   }
   &:active{
     box-shadow: ${SHADOW_SMALL};
+  }
+  &:disabled{
+    cursor: auto;
+    background-color: ${LIGHT_GRAY};
   }
 `;
