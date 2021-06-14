@@ -31,8 +31,8 @@ function NewMap() {
         "geometry": {
           "type": "Point",
             "coordinates": [
-              m.lng,
               m.lat,
+              m.lng,
             0.0
           ]
         }
@@ -56,7 +56,7 @@ function NewMap() {
     map.current.on('load', function () {
       map.current.addSource('earthquakes', {
         'type': 'geojson',
-        'data': "public/geoRouters.geojson"});
+        'data': "geo-routers.geojson"});
 
       map.current.addLayer(
         {
