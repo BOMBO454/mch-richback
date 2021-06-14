@@ -15,3 +15,17 @@ export const getPlaces = ({address}) => {
     )).catch(err => (rej(err)))
   })
 }
+
+export const getHeatMap = ({lat,lng,radius}) => {
+  return new Promise((res, rej) => {
+    instance({
+      url: "heatmap",
+      method: "POST",
+      data: {
+        lat,lng,radius
+      }
+    }).then(data => (
+      res(data.data)
+    )).catch(err => (rej(err)))
+  })
+}

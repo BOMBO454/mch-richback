@@ -1,4 +1,4 @@
-export const SHADOW = "0 4px 15px rgba(0,0,0,0.15)"
+export const SHADOW = "0 16px 36px rgba(0,0,0,0.25)"
 export const RADIUS = "8px"
 export const WHITE = "#ffffff"
 export const DARK_GRAY = "#828282"
