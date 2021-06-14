@@ -11,7 +11,8 @@ class MapStore {
     }
   }
   @observable currentPlace = {
-    title:"",
+    address: "Россия, Москва, улица Тимура Фрунзе, 11, стр. 7",
+    title: "Кулинарная лавка братьев Караваевых",
   };
   @observable places = undefined;
 

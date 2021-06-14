@@ -1,7 +1,9 @@
 import * as S from "./styled";
 import Button from "../Button/Button";
+import { useStore } from "../../store";
 
 export default function Sidebar() {
+  const { mapStore } = useStore();
   return (
     <S.Sidebar>
       <div className="side__half top">
@@ -37,7 +39,7 @@ export default function Sidebar() {
       <div className="side__half bottom">
         <div>
         <h4>Информация</h4>
-        <div>Адрес: </div>
+        <div>Адрес: {mapStore.currentPlace.address}</div>
         <div>Площадь: </div>
         <div>Тип помещения: </div>
         <div>Стоимость аренды: </div>
