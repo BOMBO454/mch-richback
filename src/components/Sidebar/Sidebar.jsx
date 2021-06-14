@@ -125,6 +125,6 @@ function Sidebar() {
       </AnimatePresence>
     </S.Sidebar>
   )
-}
+};
 
 export default observer(Sidebar)
