@@ -9,10 +9,17 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
+    "install": "^0.13.0",
     "leaflet": "^1.7.1",
+    "lodash": "^4.17.21",
+    "mapbox-gl": "^2.3.0",
     "mobx": "^6.3.2",
     "mobx-react": "^7.2.0",
+<<<<<<< HEAD
     "pm2": "^5.1.0",
+=======
+    "npm": "^7.17.0",
+>>>>>>> c1b9cf427b35cba90d191aad7581c9d01aa4a0b7
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
