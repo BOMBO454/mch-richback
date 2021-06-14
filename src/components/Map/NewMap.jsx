@@ -10,16 +10,16 @@ function NewMap() {
   const map = useRef(null);
   const [lng, setLng] = useState(37.579445);
   const [lat, setLat] = useState(55.731061);
-  const [zoom, setZoom] = useState(9);
+  const [zoom, setZoom] = useState(10);
 
   const [heat, setHeat] = useState([]);
   const [maxHeatCount, setMaxHeatCount] = useState(0);
   const [maxHeatDuration, setMaxHeatDuration] = useState(0);
 
   useEffect(() => {
-    getHeatMap({lat: 55.731061, lng: 37.579445, radius: 0.01}).then(data => {
+    getHeatMap({lat: 55.731061, lng: 37.579445, radius: 10}).then(data => {
       setHeat(data.heatmap)
-      console.log("data.heatmap", JSON.stringify(data.heatmap.map((m,id)=>({
+      console.log("data.heatmap", data.heatmap.map((m,id)=>({
         "type": "Feature",
           "properties": {
           "id": id+"",
@@ -31,12 +31,12 @@ function NewMap() {
         "geometry": {
           "type": "Point",
             "coordinates": [
-              m.lat,
               m.lng,
-            0.0
+              m.lat,
+              0.0
           ]
         }
-      }))));
+      })));
       setMaxHeatCount(_.maxBy(data.heatmap,(o)=>(o.counts)))
       setMaxHeatDuration(_.maxBy(data.heatmap,(o)=>(o.duration)))
     }).catch(err => {
@@ -56,14 +56,31 @@ function NewMap() {
     map.current.on('load', function () {
       map.current.addSource('earthquakes', {
         'type': 'geojson',
-        'data': "geo-routers.geojson"});
-
+        'data': "geo-routers.json"});
+      map.current.addSource('points', {
+        'type': 'geojson',
+        'data': {
+          'type': 'FeatureCollection',
+          'features': [
+            {
+              'type': 'Feature',
+              'geometry': {
+                'type': 'Point',
+                'coordinates': [
+                  37.579445, 55.731061
+                ]
+              },
+              'properties': {
+                'title': 'Mapbox DC'
+              }
+            }]
+        }});
       map.current.addLayer(
         {
           'id': 'earthquakes-heat',
           'type': 'heatmap',
           'source': 'earthquakes',
-          'maxzoom': 9,
+          'maxzoom': 20,
           'paint': {
 // Increase the heatmap weight based on frequency and property magnitude
             'heatmap-weight': [
@@ -83,7 +100,7 @@ function NewMap() {
               ['zoom'],
               0,
               1,
-              9,
+              20,
               3
             ],
 // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
@@ -112,8 +129,8 @@ function NewMap() {
               ['linear'],
               ['zoom'],
               0,
-              2,
-              9,
+              10,
+              20,
               20
             ],
 // Transition from heatmap to circle layer by zoom level
@@ -121,67 +138,29 @@ function NewMap() {
               'interpolate',
               ['linear'],
               ['zoom'],
-              7,
               1,
-              9,
+              1,
+              20,
               0
             ]
           }
         },
         'waterway-label'
       );
-
-      map.current.addLayer(
-        {
-          'id': 'earthquakes-point',
-          'type': 'circle',
-          'source': 'earthquakes',
-          'minzoom': 7,
-          'paint': {
-// Size circle radius by earthquake magnitude and zoom level
-            'circle-radius': [
-              'interpolate',
-              ['linear'],
-              ['zoom'],
-              7,
-              ['interpolate', ['linear'], ['get', 'mag'], 1, 1, 6, 4],
-              16,
-              ['interpolate', ['linear'], ['get', 'mag'], 1, 5, 6, 50]
-            ],
-// Color circle by earthquake magnitude
-            'circle-color': [
-              'interpolate',
-              ['linear'],
-              ['get', 'mag'],
-              1,
-              'rgba(33,102,172,0)',
-              2,
-              'rgb(103,169,207)',
-              3,
-              'rgb(209,229,240)',
-              4,
-              'rgb(253,219,199)',
-              5,
-              'rgb(239,138,98)',
-              6,
-              'rgb(178,24,43)'
-            ],
-            'circle-stroke-color': 'white',
-            'circle-stroke-width': 1,
-// Transition from heatmap to circle layer by zoom level
-            'circle-opacity': [
-              'interpolate',
-              ['linear'],
-              ['zoom'],
-              7,
-              0,
-              8,
-              1
-            ]
-          }
-        },
-        'waterway-label'
-      );
+      map.current.addLayer({
+        'id': 'points',
+        'type': 'symbol',
+        'source': 'points',
+        'layout': {
+          'text-field': ['get', 'title'],
+          'text-font': [
+            'Open Sans Semibold',
+            'Arial Unicode MS Bold'
+          ],
+          'text-offset': [0, 1.25],
+          'text-anchor': 'top'
+        }
+      });
     });
   },[heat]);
 
