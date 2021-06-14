@@ -5,10 +5,12 @@ import { useState } from "react";
 import { useStore } from "../../store";
 import { formattedMoney } from "../../helpers/money";
 import { observer } from "mobx-react";
+import { AnimatePresence } from "framer-motion";
 
 function Sidebar() {
   const {mapStore} = useStore()
   const [type, setType] = useState("type");
+  const [planVisibility, setPlanVisibility] = useState(false);
   const handleTypeChange = (newValue, actionMeta) => {
     mapStore.setType(newValue.value);
   }
@@ -73,9 +75,54 @@ function Sidebar() {
         </div>}
         <div>
           <img src="https://img3.goodfon.com/wallpaper/nbig/b/bd/koshka-leto-fon-4893.jpg" alt="Cat"/>
-          <Button>Индивидуальный план открытия</Button>
+          {mapStore.currentPlace.area &&
+          <Button onClick={() => {setPlanVisibility(true)}}>Индивидуальный план открытия</Button>}
         </div>
       </div>
+      <AnimatePresence>
+        {planVisibility &&
+        <S.Plan initial={{opacity: 0, x: "-100%"}}
+                animate={{opacity: 1, x: "0"}}
+                exit={{opacity: 0, x: "-100%"}}>
+          <h1>ИОП</h1>
+          <title>открыть ресторан грузинской кухни</title>
+
+          <p>Показываем помещения свободного назначения и торговли, соответствующей площадью +/- 20 м2, в верху самые
+            лучшие варианты с описанием</p>
+
+          <p>В описании (данные взяты с https://irr.ru/):
+            <ul>
+              <li>- Адрес: Арбат, 44 ст1</li>
+              <li>- Общая площадь 160 м2 в двух уровнях (1 этаж - 121,1 м2.; Подвал - 38,9 м2 )</li>
+              <li>- Помещение стрит ритейл</li>
+              <li>- 5 минут от м. Смоленская</li>
+              <li>- Отдельный вход с ул. Арбат, запасной (зона разгрузки товара)</li>
+              <li>- Потолки 3 метра</li>
+              <li>- Приточно вытяжная вентиляция</li>
+              <li>- Электричество 70 квт</li>
+              <li>- Реклама на фасаде</li>
+              <li>- Согласованное место для летней веранды со стороны фасада</li>
+              <li>- Прямая аренда 150.000 рублей в месяц</li>
+              <li>- Депозит, каникулы по условиям договора</li>
+              <li>- клиентский поток 25000 в сутки
+              </li>
+            </ul>
+          </p>
+          <p>Конкуренты (данные взяты с https://2gis.ru/):
+            В радиусе 1 километра есть только одна хинкальная:
+            - время работы: ежедневно с 11:00 до 23:00
+            - средний чек: 500 рублей
+            - до 35 мест
+            - рейтинг 3,6/5
+          </p>
+          <p>
+            Рекомендуем из-за большого клиентского потока, отсутствия сильного конкурента в радиусе 1 км, подходящее
+            помещение именно под ресторан (экономия на ремонте)
+          </p>
+          <Button onClick={()=>{setPlanVisibility(false)}}>Закрыть</Button>
+        </S.Plan>
+        }
+      </AnimatePresence>
     </S.Sidebar>
   )
 }

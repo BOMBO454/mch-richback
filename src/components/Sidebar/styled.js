@@ -1,6 +1,9 @@
 import styled from "styled-components"
+import {motion} from "framer-motion"
+import { SHADOW } from "../../constants/variablas";
 
 export const Sidebar = styled.aside`
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -85,3 +88,14 @@ export const Sidebar = styled.aside`
     }
   }
 `;
+
+export const Plan = styled(motion.div)`
+  position: absolute;
+  background-color: white;
+  box-shadow: ${SHADOW};
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+`
