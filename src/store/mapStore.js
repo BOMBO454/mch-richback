@@ -27,13 +27,13 @@ class MapStore {
   }
 
   @action
-  setType(type) {
-    this.type = type;
+  setCurrentPlace(currentPlace) {
+    this.currentPlace = currentPlace;
   }
 
   @action
-  setCurrentPlace(currentPlace) {
-    this.currentPlace = currentPlace;
+  setType(type) {
+    this.type = type;
   }
 }
 

@@ -3,8 +3,10 @@ import Button from "../Button/Button";
 import Select from "react-select";
 import { useState } from "react";
 import { useStore } from "../../store";
+import { formattedMoney } from "../../helpers/money";
+import { observer } from "mobx-react";
 
-export default function Sidebar() {
+function Sidebar() {
   const {mapStore} = useStore()
   const [type, setType] = useState("type");
   const handleTypeChange = (newValue, actionMeta) => {
@@ -53,16 +55,22 @@ export default function Sidebar() {
         </div>
       </div>
       <div className="side__half bottom">
-        <div>
-        <h4>Информация</h4>
-        <div>Адрес: {mapStore.currentPlace.address}</div>
-        <div>Площадь: </div>
-        <div>Тип помещения: </div>
-        <div>Стоимость аренды: </div>
-        <p className="description">
-
-        </p>
-        </div>
+        {mapStore.currentPlace.area && <div>
+          <h4>Информация</h4>
+          <pan>Сдача {mapStore.currentPlace.area}м^2 за {formattedMoney(mapStore.currentPlace.cost)}р</pan>
+          <li>Хороших компаний рядом {mapStore.currentPlace.biz_count}</li>
+          <li>До метро {mapStore.currentPlace.metro_station} {formattedMoney(mapStore.currentPlace.metro_dist)}км</li>
+          <li>поток {mapStore.currentPlace.usertime}/м длительность</li>
+          <li>поток {mapStore.currentPlace.counts}/ч человек</li>
+          <li>этаж {mapStore.currentPlace.floor}</li>
+          <li>конкурентов рядом {mapStore.currentPlace.comp_count}</li>
+          <ul>
+            <h4>Рядом есть интересные места:</h4>
+            {mapStore.currentPlace.land_arround && mapStore.currentPlace.land_arround.slice(0, 5).map(land => (
+              <li>{land.name} {formattedMoney(land.place_dist)}м</li>
+            ))}
+          </ul>
+        </div>}
         <div>
           <img src="https://img3.goodfon.com/wallpaper/nbig/b/bd/koshka-leto-fon-4893.jpg" alt="Cat"/>
           <Button>Индивидуальный план открытия</Button>
@@ -71,3 +79,5 @@ export default function Sidebar() {
     </S.Sidebar>
   )
 }
+
+export default observer(Sidebar)

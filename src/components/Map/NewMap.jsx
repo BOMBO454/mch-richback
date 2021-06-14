@@ -6,6 +6,7 @@ import { geo } from "../../constants/geo-routers";
 import { observer } from "mobx-react";
 import { Icon, Pop } from "./styled";
 import { getPlaces } from "../../api/places";
+import { formattedMoney } from "../../helpers/money";
 
 function NewMap() {
   const {mapStore} = useStore()
@@ -15,8 +16,6 @@ function NewMap() {
   );
   const [showPopup, setShowPopup] = useState(undefined);
 
-  console.log("mapStore.address", mapStore.address);
-
   useEffect(() => {
     getPlaces({address: mapStore.address, type: mapStore.type}).then(data => {
       setPlaces(data.places)
@@ -25,12 +24,18 @@ function NewMap() {
     })
   }, [mapStore.address, mapStore.type]);
 
+  const closeMarker = (e)=>{
+    e.stopPropagation()
+    setShowPopup(undefined)
+  }
+
   const onMarkerClick = (event,key,data) => {
     event.stopPropagation();
     if(showPopup === key){
       setShowPopup(undefined)
     }else{
       setShowPopup(key)
+      mapStore.setCurrentPlace(data);
     }
   };
 
@@ -107,13 +112,21 @@ function NewMap() {
       />
       {places && places.map((v, key) => (
         <Marker
-          onClick={(e)=>{onMarkerClick(e,key,v)}}
+          onClick={(e)=>{onMarkerClick(e,key+"key",v)}}
           key={key}
           longitude={v.lng}
           latitude={v.lat}
         >
-          {showPopup === key ?
-            <Pop>v.cost</Pop>:<Icon/>
+          {showPopup === key+"key" ?
+            <Pop onClick={closeMarker}>
+              <h4>Сдача {v.area}м^2 за {formattedMoney(v.cost)}р</h4>
+              <li>Хороших компаний рядом {v.biz_count}</li>
+              <li>До метро {v.metro_station} {formattedMoney(v.metro_dist)}км</li>
+              <li>поток {v.usertime}/м длительность</li>
+              <li>поток {v.counts}/ч человек</li>
+              <li>этаж {v.floor}</li>
+              <li>конкурентов рядом {v.comp_count}</li>
+            </Pop>:<Icon/>
           }
         </Marker>
       ))}
