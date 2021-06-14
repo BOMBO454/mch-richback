@@ -10,6 +10,16 @@ export const Sidebar = styled.aside`
   .side__half {
     flex: 1 0 auto;
     
+    ul {
+      margin: 0 0 20px 0;
+      padding: 0;
+      cursor: pointer;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+    
     &.top {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -31,16 +41,6 @@ export const Sidebar = styled.aside`
       
       h5 {
         margin-top: 0;
-      }
-      
-      ul {
-        margin: 0 0 20px 0;
-        padding: 0;
-        cursor: pointer;
-        
-        &:last-of-type {
-          margin-bottom: 0;
-        }
       }
       
       li {
@@ -81,6 +81,10 @@ export const Sidebar = styled.aside`
           justify-content: space-between;
           align-items: center;
         }
+      }
+      
+      ul {
+        padding-left: 20px;
       }
     }
   }

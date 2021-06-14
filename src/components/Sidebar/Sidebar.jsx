@@ -58,14 +58,16 @@ function Sidebar() {
         {mapStore.currentPlace.area && <div>
           <h4>Информация</h4>
           <pan>Сдача {mapStore.currentPlace.area}м^2 за {formattedMoney(mapStore.currentPlace.cost)}р</pan>
-          <li>Хороших компаний рядом {mapStore.currentPlace.biz_count}</li>
-          <li>До метро {mapStore.currentPlace.metro_station} {formattedMoney(mapStore.currentPlace.metro_dist)}км</li>
-          <li>поток {mapStore.currentPlace.usertime}/м длительность</li>
-          <li>поток {mapStore.currentPlace.counts}/ч человек</li>
-          <li>этаж {mapStore.currentPlace.floor}</li>
-          <li>конкурентов рядом {mapStore.currentPlace.comp_count}</li>
           <ul>
-            <h4>Рядом есть интересные места:</h4>
+            <li>Хороших компаний рядом {mapStore.currentPlace.biz_count}</li>
+            <li>До метро {mapStore.currentPlace.metro_station} {formattedMoney(mapStore.currentPlace.metro_dist)}км</li>
+            <li>поток {mapStore.currentPlace.usertime}/м длительность</li>
+            <li>поток {mapStore.currentPlace.counts}/ч человек</li>
+            <li>этаж {mapStore.currentPlace.floor}</li>
+            <li>конкурентов рядом {mapStore.currentPlace.comp_count}</li>
+          </ul>
+          <h4>Рядом есть интересные места:</h4>
+          <ul>
             {mapStore.currentPlace.land_arround && mapStore.currentPlace.land_arround.slice(0, 5).map(land => (
               <li>{land.name} {formattedMoney(land.place_dist)}м</li>
             ))}
