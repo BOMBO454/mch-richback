@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-import { getHeatMap } from "../../api/places";
+import { getHeatMap, getPlaces } from "../../api/places";
 import _ from "lodash";
+import { useStore } from "../../store";
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiYm9tYm80NTQiLCJhIjoiY2twdzZ0bThqMjN0ODJuczQ0aXVnMzl3bSJ9.E1BawLB43d-KHeCyFxuNIg';
 
 function NewMap() {
+  const {mapStore} = useStore()
+  const [places, setPlaces] = useState([])
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [lng, setLng] = useState(37.579445);
@@ -15,30 +18,21 @@ function NewMap() {
   const [heat, setHeat] = useState([]);
   const [maxHeatCount, setMaxHeatCount] = useState(0);
   const [maxHeatDuration, setMaxHeatDuration] = useState(0);
+  useEffect(() => {
+    if (mapStore.address) {
+      getPlaces({address: mapStore.address}).then(data => {
+        console.log("data", data)
+        setPlaces(data.places)
+      }).catch(err => {
+        alert(err)
+        console.log("err", err)
+      })
+    }
+  },[])
 
   useEffect(() => {
     getHeatMap({lat: 55.731061, lng: 37.579445, radius: 10}).then(data => {
       setHeat(data.heatmap)
-      console.log("data.heatmap", data.heatmap.map((m,id)=>({
-        "type": "Feature",
-          "properties": {
-          "id": id+"",
-            "mag": 2.3,
-            "time": 1507425650893,
-            "felt": null,
-            "tsunami": 0
-        },
-        "geometry": {
-          "type": "Point",
-            "coordinates": [
-              m.lng,
-              m.lat,
-              0.0
-          ]
-        }
-      })));
-      setMaxHeatCount(_.maxBy(data.heatmap,(o)=>(o.counts)))
-      setMaxHeatDuration(_.maxBy(data.heatmap,(o)=>(o.duration)))
     }).catch(err => {
       alert(err)
       console.log("err", err)
@@ -46,35 +40,18 @@ function NewMap() {
   }, [])
 
   useEffect(() => {
-    if (map.current) return; // initialize map only once
+    if (map.current) return;
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [lng, lat],
-      zoom: zoom
+      zoom: zoom,
+      language:"ru-RU"
     });
     map.current.on('load', function () {
       map.current.addSource('earthquakes', {
         'type': 'geojson',
         'data': "geo-routers.json"});
-      map.current.addSource('points', {
-        'type': 'geojson',
-        'data': {
-          'type': 'FeatureCollection',
-          'features': [
-            {
-              'type': 'Feature',
-              'geometry': {
-                'type': 'Point',
-                'coordinates': [
-                  37.579445, 55.731061
-                ]
-              },
-              'properties': {
-                'title': 'Mapbox DC'
-              }
-            }]
-        }});
       map.current.addLayer(
         {
           'id': 'earthquakes-heat',
@@ -147,20 +124,6 @@ function NewMap() {
         },
         'waterway-label'
       );
-      map.current.addLayer({
-        'id': 'points',
-        'type': 'symbol',
-        'source': 'points',
-        'layout': {
-          'text-field': ['get', 'title'],
-          'text-font': [
-            'Open Sans Semibold',
-            'Arial Unicode MS Bold'
-          ],
-          'text-offset': [0, 1.25],
-          'text-anchor': 'top'
-        }
-      });
     });
   },[heat]);
 

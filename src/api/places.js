@@ -6,7 +6,7 @@ export const getPlaces = ({address}) => {
       url: "places",
       method: "POST",
       data: {
-        type: "кафе",
+        type: "cafe",
         address: address,
         topk: 10,
       }
