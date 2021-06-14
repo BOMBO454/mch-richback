@@ -14,7 +14,7 @@ function NewMap() {
   const [viewport, setViewport] = useState(
     mapStore.map.viewport
   );
-  const [showPopup, setShowPopup] = useState(undefined);
+  const [showPopup, setShowPopup] = useState(-1);
 
   useEffect(() => {
     getPlaces({address: mapStore.address, type: mapStore.type}).then(data => {
@@ -26,13 +26,13 @@ function NewMap() {
 
   const closeMarker = (e)=>{
     e.stopPropagation()
-    setShowPopup(undefined)
+    setTimeout(() => setShowPopup(-1), 0)
   }
 
   const onMarkerClick = (event,key,data) => {
     event.stopPropagation();
     if (showPopup === key) {
-      setShowPopup(undefined)
+      setTimeout(() => setShowPopup(-1), 0)
     } else {
       setShowPopup(key)
       mapStore.setCurrentPlace(data);
@@ -126,7 +126,7 @@ function NewMap() {
               <li>поток {v.counts}/ч человек</li>
               <li>этаж {v.floor}</li>
               <li>конкурентов рядом {v.comp_count}</li>
-            </Pop>:<Icon/>
+            </Pop>:<Icon className={showPopup >= 0 ? 'hidden' : ''}/>
           }
         </Marker>
       ))}
