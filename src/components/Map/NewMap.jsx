@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import mapboxgl from '!mapbox-gl';
+import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { getHeatMap } from "../../api/places";
 import _ from "lodash";
-// eslint-disable-line import/no-webpack-loader-syntax
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiYm9tYm80NTQiLCJhIjoiY2twdzZ0bThqMjN0ODJuczQ0aXVnMzl3bSJ9.E1BawLB43d-KHeCyFxuNIg';
 
@@ -20,6 +19,7 @@ function NewMap() {
   useEffect(() => {
     getHeatMap({lat: 55.731061, lng: 37.579445, radius: 0.01}).then(data => {
       setHeat(data.heatmap)
+      console.log("data.heatmap", data.heatmap);
       setMaxHeatCount(_.maxBy(data.heatmap,(o)=>(o.counts)))
       setMaxHeatDuration(_.maxBy(data.heatmap,(o)=>(o.duration)))
     }).catch(err => {
@@ -39,8 +39,7 @@ function NewMap() {
     map.current.on('load', function () {
       map.current.addSource('earthquakes', {
         'type': 'geojson',
-        'data': 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
-      });
+        'data': "public/geoRouters.geojson"});
 
       map.current.addLayer(
         {
