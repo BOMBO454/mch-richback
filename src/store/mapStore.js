@@ -1,4 +1,5 @@
-import {action, makeObservable, observable} from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
+import { getPlaces } from "../api/places";
 
 class MapStore {
   @observable address = "Метро Парк Культуры";
@@ -12,9 +13,21 @@ class MapStore {
   @observable currentPlace = {
     title:"",
   };
+  @observable places = undefined;
 
   constructor() {
     makeObservable(this); // https://mobx.js.org/enabling-decorators.html
+    this.getPlacesAction()
+  }
+
+  @action
+  getPlacesAction(){
+    getPlaces({address: this.address}).then(data => {
+      this.places = data.places
+      return data.places
+    }).catch(err => {
+      this.places = []
+    })
   }
 
   @action

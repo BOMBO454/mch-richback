@@ -1,44 +1,25 @@
 import { useEffect, useRef, useState } from "react";
-// import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-import { getHeatMap, getPlaces } from "../../api/places";
 import { useStore } from "../../store";
-import MapGL, { Layer, Source } from '@urbica/react-map-gl';
+import MapGL, { Layer, Marker, Source } from '@urbica/react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { geo } from "../../constants/geo-routers";
+import { observer } from "mobx-react";
+import { Icon } from "./styled";
 
 function NewMap() {
   const {mapStore} = useStore()
-  const [places, setPlaces] = useState([])
-  const mapContainer = useRef(null);
-  const map = useRef(null);
   const [viewport, setViewport] = useState(
     mapStore.map.viewport
   );
-  const [zoom, setZoom] = useState(10);
 
-  const [heat, setHeat] = useState([]);
-  const [maxHeatCount, setMaxHeatCount] = useState(0);
-  const [maxHeatDuration, setMaxHeatDuration] = useState(0);
   useEffect(() => {
-    if (mapStore.address) {
-      getPlaces({address: mapStore.address}).then(data => {
-        console.log("data", data)
-        setPlaces(data.places)
-      }).catch(err => {
-        alert(err)
-        console.log("err", err)
-      })
-    }
-  }, [])
+    mapStore.getPlacesAction()
+  }, []);
 
-  /*useEffect(() => {
-    getHeatMap({lat: 55.731061, lng: 37.579445, radius: 10}).then(data => {
-      setHeat(data.heatmap)
-    }).catch(err => {
-      alert(err)
-      console.log("err", err)
-    })
-  }, [])*/
+
+  useEffect(() => {
+    console.log(mapStore.places);
+  })
 
   return (
     <MapGL
@@ -111,8 +92,17 @@ function NewMap() {
           ]
         }}
       />
+      {mapStore.places && mapStore.places.map((v,key)=>(
+        <Marker
+          key={key}
+          longitude={v.lng}
+          latitude={v.lat}
+        >
+          <Icon/>
+        </Marker>
+      ))}
     </MapGL>
   )
 }
 
-export default NewMap
+export default observer(NewMap)
