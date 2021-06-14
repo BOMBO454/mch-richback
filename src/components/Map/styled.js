@@ -1,6 +1,13 @@
 import styled from "styled-components"
-import { DARK_GRAY, SHADOW, TRANSITION_FAST } from "../../constants/variablas";
+import { DARK_GRAY, RADIUS, SHADOW, TRANSITION_FAST } from "../../constants/variablas";
 
+export const Pop = styled.div`
+  transition: ${TRANSITION_FAST};
+  border-radius: ${RADIUS};
+  padding: 10px;
+  background-color: white;
+  border: 2px solid ${DARK_GRAY};
+`
 export const Icon = styled.div`
   width: 20px;
   height: 20px;

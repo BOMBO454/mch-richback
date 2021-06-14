@@ -1,25 +1,38 @@
 import { useEffect, useRef, useState } from "react";
 import { useStore } from "../../store";
-import MapGL, { Layer, Marker, Source } from '@urbica/react-map-gl';
+import MapGL, { Layer, Marker, Popup, Source } from '@urbica/react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { geo } from "../../constants/geo-routers";
 import { observer } from "mobx-react";
-import { Icon } from "./styled";
+import { Icon, Pop } from "./styled";
+import { getPlaces } from "../../api/places";
 
 function NewMap() {
   const {mapStore} = useStore()
+  const [places, setPlaces] = useState([]);
   const [viewport, setViewport] = useState(
     mapStore.map.viewport
   );
+  const [showPopup, setShowPopup] = useState(undefined);
+
+  console.log("mapStore.address", mapStore.address);
 
   useEffect(() => {
-    mapStore.getPlacesAction()
-  }, []);
+    getPlaces({address: mapStore.address, type: mapStore.type}).then(data => {
+      setPlaces(data.places)
+    }).catch(err => {
+      console.error(err)
+    })
+  }, [mapStore.address, mapStore.type]);
 
-
-  useEffect(() => {
-    console.log(mapStore.places);
-  })
+  const onMarkerClick = (event,key,data) => {
+    event.stopPropagation();
+    if(showPopup === key){
+      setShowPopup(undefined)
+    }else{
+      setShowPopup(key)
+    }
+  };
 
   return (
     <MapGL
@@ -92,17 +105,20 @@ function NewMap() {
           ]
         }}
       />
-      {mapStore.places && mapStore.places.map((v,key)=>(
+      {places && places.map((v, key) => (
         <Marker
+          onClick={(e)=>{onMarkerClick(e,key,v)}}
           key={key}
           longitude={v.lng}
           latitude={v.lat}
         >
-          <Icon/>
+          {showPopup === key ?
+            <Pop>v.cost</Pop>:<Icon/>
+          }
         </Marker>
       ))}
     </MapGL>
   )
-}
+};
 
 export default observer(NewMap)
