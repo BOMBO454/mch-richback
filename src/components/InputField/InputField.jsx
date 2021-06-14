@@ -1,9 +1,9 @@
-// import {} from "./styled";
+import * as S from "./styled";
 
 export default function InputField({value, onChange}) {
   return (
-    <label>
-      <input value={value} onChange={onChange}/>
-    </label>
+    <S.InputField>
+      <input value={value} onChange={onChange} placeholder="Введите тип заведения" />
+    </S.InputField>
   )
 }
