@@ -1,4 +1,4 @@
-{
+export const geo = {
   "type": "FeatureCollection",
   "features": [
     {

@@ -2,8 +2,15 @@ import {action, makeObservable, observable} from "mobx";
 
 class MapStore {
   @observable address = "Метро Парк Культуры";
+  @observable map = {
+    viewport:{
+      longitude:37.579445,
+      latitude:55.731061,
+      zoom: 11
+    }
+  }
   @observable currentPlace = {
-    title:""
+    title:"",
   };
 
   constructor() {
