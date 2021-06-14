@@ -1,44 +1,38 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-import { getHeatMap } from "../../api/places";
+import { getHeatMap, getPlaces } from "../../api/places";
 import _ from "lodash";
+import { useStore } from "../../store";
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiYm9tYm80NTQiLCJhIjoiY2twdzZ0bThqMjN0ODJuczQ0aXVnMzl3bSJ9.E1BawLB43d-KHeCyFxuNIg';
 
 function NewMap() {
+  const {mapStore} = useStore()
+  const [places, setPlaces] = useState([])
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [lng, setLng] = useState(37.579445);
   const [lat, setLat] = useState(55.731061);
-  const [zoom, setZoom] = useState(9);
+  const [zoom, setZoom] = useState(10);
 
   const [heat, setHeat] = useState([]);
   const [maxHeatCount, setMaxHeatCount] = useState(0);
   const [maxHeatDuration, setMaxHeatDuration] = useState(0);
+  useEffect(() => {
+    if (mapStore.address) {
+      getPlaces({address: mapStore.address}).then(data => {
+        console.log("data", data)
+        setPlaces(data.places)
+      }).catch(err => {
+        alert(err)
+        console.log("err", err)
+      })
+    }
+  },[])
 
   useEffect(() => {
-    getHeatMap({lat: 55.731061, lng: 37.579445, radius: 0.01}).then(data => {
+    getHeatMap({lat: 55.731061, lng: 37.579445, radius: 10}).then(data => {
       setHeat(data.heatmap)
-      console.log("data.heatmap", JSON.stringify(data.heatmap.map((m,id)=>({
-        "type": "Feature",
-          "properties": {
-          "id": id+"",
-            "mag": 2.3,
-            "time": 1507425650893,
-            "felt": null,
-            "tsunami": 0
-        },
-        "geometry": {
-          "type": "Point",
-            "coordinates": [
-              m.lat,
-              m.lng,
-            0.0
-          ]
-        }
-      }))));
-      setMaxHeatCount(_.maxBy(data.heatmap,(o)=>(o.counts)))
-      setMaxHeatDuration(_.maxBy(data.heatmap,(o)=>(o.duration)))
     }).catch(err => {
       alert(err)
       console.log("err", err)
@@ -46,24 +40,24 @@ function NewMap() {
   }, [])
 
   useEffect(() => {
-    if (map.current) return; // initialize map only once
+    if (map.current) return;
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [lng, lat],
-      zoom: zoom
+      zoom: zoom,
+      language:"ru-RU"
     });
     map.current.on('load', function () {
       map.current.addSource('earthquakes', {
         'type': 'geojson',
-        'data': "geo-routers.geojson"});
-
+        'data': "geo-routers.json"});
       map.current.addLayer(
         {
           'id': 'earthquakes-heat',
           'type': 'heatmap',
           'source': 'earthquakes',
-          'maxzoom': 9,
+          'maxzoom': 20,
           'paint': {
 // Increase the heatmap weight based on frequency and property magnitude
             'heatmap-weight': [
@@ -83,7 +77,7 @@ function NewMap() {
               ['zoom'],
               0,
               1,
-              9,
+              20,
               3
             ],
 // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
@@ -112,8 +106,8 @@ function NewMap() {
               ['linear'],
               ['zoom'],
               0,
-              2,
-              9,
+              10,
+              20,
               20
             ],
 // Transition from heatmap to circle layer by zoom level
@@ -121,62 +115,10 @@ function NewMap() {
               'interpolate',
               ['linear'],
               ['zoom'],
-              7,
               1,
-              9,
+              1,
+              20,
               0
-            ]
-          }
-        },
-        'waterway-label'
-      );
-
-      map.current.addLayer(
-        {
-          'id': 'earthquakes-point',
-          'type': 'circle',
-          'source': 'earthquakes',
-          'minzoom': 7,
-          'paint': {
-// Size circle radius by earthquake magnitude and zoom level
-            'circle-radius': [
-              'interpolate',
-              ['linear'],
-              ['zoom'],
-              7,
-              ['interpolate', ['linear'], ['get', 'mag'], 1, 1, 6, 4],
-              16,
-              ['interpolate', ['linear'], ['get', 'mag'], 1, 5, 6, 50]
-            ],
-// Color circle by earthquake magnitude
-            'circle-color': [
-              'interpolate',
-              ['linear'],
-              ['get', 'mag'],
-              1,
-              'rgba(33,102,172,0)',
-              2,
-              'rgb(103,169,207)',
-              3,
-              'rgb(209,229,240)',
-              4,
-              'rgb(253,219,199)',
-              5,
-              'rgb(239,138,98)',
-              6,
-              'rgb(178,24,43)'
-            ],
-            'circle-stroke-color': 'white',
-            'circle-stroke-width': 1,
-// Transition from heatmap to circle layer by zoom level
-            'circle-opacity': [
-              'interpolate',
-              ['linear'],
-              ['zoom'],
-              7,
-              0,
-              8,
-              1
             ]
           }
         },
