@@ -23,7 +23,7 @@ function Map({places}) {
   }, [])
   return (
     <YMaps modules={["Heatmap"]} query={{apikey: "3a938c7f-953d-484c-9fee-5d2b9c12bb53"}}>
-      <YMap instanceRef={mapRef} style={{flexGrow: 1}} width={"100%"} height={"100%"} defaultState={{
+      <YMap instanceRef={mapRef} style={{ flexGrow: '1' }} width={"100%"} height={"100%"} defaultState={{
         center: [55.75, 37.57], zoom: 9,
         modules: ["geoObject.addon.balloon", "geoObject.addon.hint"]
       }}>

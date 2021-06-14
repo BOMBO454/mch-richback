@@ -9,7 +9,7 @@ export const getPlaces = ({address}) => {
         type: "cafe",
         address: address,
         topk: 10,
-      }
+      },
     }).then(data => (
       res(data.data)
     )).catch(err => (rej(err)))
