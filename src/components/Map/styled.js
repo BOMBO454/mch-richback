@@ -16,6 +16,10 @@ export const Icon = styled.div`
   border-radius: 100%;
   cursor: pointer;
   transition: ${TRANSITION_FAST};
+  
+  &.hidden {
+    opacity: 0;
+  }
   &:hover{
     box-shadow: ${SHADOW};
   }
