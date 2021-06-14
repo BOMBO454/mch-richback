@@ -4,7 +4,7 @@ import Button from "../Button/Button";
 export default function Sidebar() {
   return (
     <S.Sidebar>
-      <div className="side__half grid">
+      <div className="side__half top">
         <div>
           <Button>Карта</Button>
           <Button>Анализ организации</Button>
@@ -34,8 +34,21 @@ export default function Sidebar() {
           </ul>
         </div>
       </div>
-      <div className="side__half">
+      <div className="side__half bottom">
+        <div>
+        <h4>Информация</h4>
+        <div>Адрес: </div>
+        <div>Площадь: </div>
+        <div>Тип помещения: </div>
+        <div>Стоимость аренды: </div>
+        <p className="description">
 
+        </p>
+        </div>
+        <div>
+          <img src="https://img3.goodfon.com/wallpaper/nbig/b/bd/koshka-leto-fon-4893.jpg" alt="Cat"/>
+          <Button>Индивидуальный план открытия</Button>
+        </div>
       </div>
     </S.Sidebar>
   )
