@@ -5,17 +5,21 @@ import {
   Link
 } from "react-router-dom";
 import Home from "./pages/Home";
-import Header from "./components/Header/Header";
+import Container from "./components/Container/Container";
+import {StoreProvider} from "./store";
 
 function App() {
   return (
     <Router>
-      <Header />
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-      </Switch>
+      <StoreProvider>
+        <Container>
+          <Switch>
+            <Route exact path="/">
+              <Home/>
+            </Route>
+          </Switch>
+        </Container>
+      </StoreProvider>
     </Router>
   );
 }

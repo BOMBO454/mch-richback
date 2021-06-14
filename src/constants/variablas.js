@@ -1,0 +1,5 @@
+export const SHADOW = "0 4px 15px rgba(0,0,0,0.15)"
+export const RADIUS = "8px"
+export const WHITE = "#ffffff"
+export const DARK_GRAY = "#828282"
+export const TRANSITION_FAST = "0.15s ease-out"
